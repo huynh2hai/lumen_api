@@ -15,6 +15,4 @@ $app->get('/', function () use ($app) {
     return $app->version();
 });
 
-$app->get('hello', function(){
-    return 'alsdfasdf';
-});
+$app->get('/books', 'BooksController@index');

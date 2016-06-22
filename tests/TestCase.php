@@ -1,9 +1,12 @@
 <?php
 
 namespace Tests\App;
+use Laravel\Lumen\Testing\Concerns\MakesHttpRequests;
 
 class TestCase extends \Laravel\Lumen\Testing\TestCase
 {
+    use MakesHttpRequests;
+
     /**
      * Creates the application.
      *
