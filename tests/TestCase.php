@@ -16,4 +16,22 @@ class TestCase extends \Laravel\Lumen\Testing\TestCase
     {
         return require __DIR__.'/../bootstrap/app.php';
     }
+
+    /**
+     * Asserts that the response header matches a given regular expression
+     *
+     * @param  $header
+     * @param  $regexp
+     * @return $this
+     */
+    public function seeHeaderWithRegExp($header, $regexp)
+    {
+        $this->seeHeader($header)
+            ->assertRegExp(
+                $regexp,
+                $this->response->headers->get($header)
+            );
+
+        return $this;
+    }
 }
