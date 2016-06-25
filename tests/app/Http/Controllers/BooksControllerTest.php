@@ -4,9 +4,13 @@ namespace Tests\App\Http\Controllers;
 
 use Laravel\Lumen\Testing\DatabaseTransactions;
 use Tests\App\TestCase;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 
 class BooksControllerTest extends TestCase
 {
+    // @todo: use factory for the rest
+    use DatabaseMigrations;
+
     /** @test */
     public function index_status_code_shoud_be_200()
     {
@@ -16,22 +20,27 @@ class BooksControllerTest extends TestCase
     /** @test */
     public function index_should_return_a_collection_of_records()
     {
-        $this->get('/books')->seeJson(['title' => 'War of the Worlds'])
-                            ->seeJson(['title' => 'A Wrinkle in Time']);
+        $books = factory('App\Book', 2)->create();
+
+        $this->get('books');
+
+        foreach ($books as $book) {
+            $this->seeJson(['title' => $book->title]);
+        }
     }
 
     /** @test */
     public function show_should_return_a_valid_book()
     {
-        // $this->markTestIncompletelete('Pending test');
+        $book = factory('App\Book')->create();
 
-        $this->get('/books/1')
+        $this->get("/books/{{$book->id}}")
             ->seeStatusCode(200)
             ->seeJson([
-                'id'          => 1,
-                'title'       => 'War of the Worlds',
-                'description' => 'A science fiction masterpiece about Martians invading London',
-                'author'      => 'H. G. Wells'
+                'id'          => $book->id,
+                'title'       => $book->title,
+                'description' => $book->description,
+                'author'      => $book->author
             ]);
 
         $data = json_decode($this->response->getContent(), true);
