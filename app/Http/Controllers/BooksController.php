@@ -37,6 +37,23 @@ class BooksController
         }
     }
 
+    public function update(Request $request, $id)
+    {
+        try{
+            $book = Book::findOrFail($id);
+        }catch(ModelNotFoundException $e) {
+            return response()->json([
+                'error' => [
+                        'message' => 'Book not found'
+                    ]
+                ], 404);
+        }
+        $book->fill($request->all());
+        $book->save();
+
+        return $book;
+    }
+
     /**
      * POST /books
      *
