@@ -8,6 +8,17 @@ class TestCase extends \Laravel\Lumen\Testing\TestCase
     use MakesHttpRequests;
 
     /**
+     * Setup the test environment.
+     *
+     * @return void
+     */
+    public function setUp()
+    {
+        parent::setUp();
+        $this->artisan('migrate:refresh');
+    }
+
+    /**
      * Creates the application.
      *
      * @return \Laravel\Lumen\Application
