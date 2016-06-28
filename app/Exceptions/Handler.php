@@ -8,6 +8,7 @@ use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Laravel\Lumen\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpFoundation\Response;
 
 class Handler extends ExceptionHandler
 {
@@ -55,6 +56,9 @@ class Handler extends ExceptionHandler
             if($e instanceof HttpException) {
                 $response['message'] = Response::$statusTexts[$e->getStatusCode()];
                 $response['status']  = $e->getStatusCode();
+            } else if($e instanceof ModelNotFoundException) {
+                $response['message'] = Response::$statusTexts[Response::HTTP_NOT_FOUND];
+                $response['status']  = Response::HTTP_NOT_FOUND;
             }
 
             if($this->isDebugMode()) {
@@ -68,5 +72,10 @@ class Handler extends ExceptionHandler
         }
 
         return parent::render($request, $e);
+    }
+
+    public function isDebugMode()
+    {
+        return (boolean) env('APP_DEBUG');
     }
 }

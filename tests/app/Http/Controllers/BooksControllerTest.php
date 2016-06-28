@@ -7,6 +7,9 @@ use Tests\App\TestCase;
 
 class BooksControllerTest extends TestCase
 {
+    // @todo: use factory for the rest
+    // use DatabaseMigrations;
+
     /** @test */
     public function index_status_code_shoud_be_200()
     {
@@ -49,11 +52,12 @@ class BooksControllerTest extends TestCase
     /** @test */
     public function show_should_fail_when_the_book_id_does_not_exists()
     {
-        $this->get('/books/99999')
+        $this->get('/books/99999', ['Accept' => 'application/json'])
              ->seeStatusCode(404)
              ->seeJson([
                 'error' => [
-                    'message' => 'Book not found'
+                    'message' => 'Not Found',
+                    'status'  => 404
                 ]
             ]);
     }
