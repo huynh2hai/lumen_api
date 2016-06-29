@@ -22,13 +22,22 @@ class BooksControllerTest extends TestCase
     {
         $books = factory('App\Book', 2)->create();
 
-        $this->get('books');
+        $this->get('/books');
 
-        $expected = [
-            'data' => $books->toArray()
-        ];
+        $content = json_decode($this->response->getContent(), true);
+        $this->assertArrayHasKey('data', $content);
 
-        $this->seeJsonEquals($expected);
+        foreach($books as $book)
+        {
+            $this->seeJson([
+                'id'          => $book->id,
+                'title'       => $book->title,
+                'description' => $book->description,
+                'author'      => $book->author,
+                'created'     => $book->created_at->toIso8601String(),
+                'updated'     => $book->updated_at->toIso8601String(),
+            ]);
+        }
     }
 
     /** @test */
@@ -36,13 +45,19 @@ class BooksControllerTest extends TestCase
     {
         $book = factory('App\Book')->create();
 
-        $expected = [
-            'data' => $book->toArray()
-        ];
+        $this->get('books/'.$book->id)->seeStatusCode(200);
 
-        $this->get("/books/{$book->id}")
-            ->seeStatusCode(200)
-            ->seeJsonEquals($expected);
+        $content = json_decode($this->response->getContent(), true);
+        $this->assertArrayHasKey('data', $content);
+
+        $data = $content['data'];
+
+        $this->assertEquals($book->id, $data['id']);
+        $this->assertEquals($book->title, $data['title']);
+        $this->assertEquals($book->description, $data['description']);
+        $this->assertEquals($book->author, $data['author']);
+        $this->assertEquals($book->created_at->toIso8601String(), $data['created']);
+        $this->assertEquals($book->updated_at->toIso8601String(), $data['updated']);
     }
 
     /** @test */
