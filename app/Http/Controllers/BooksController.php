@@ -6,9 +6,12 @@ use App\Book;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use App\Transformer\BookTransformer;
+use Laravel\Lumen\Routing\ProvidesConvenienceMethods;
 
 class BooksController extends Controller
 {
+    use ProvidesConvenienceMethods;
+
     /**
      * GET /books
      *
@@ -41,6 +44,13 @@ class BooksController extends Controller
                     ]
                 ], 404);
         }
+
+        $this->validate($request, [
+            'title'       => 'required|max:255',
+            'description' => 'required',
+            'author'      => 'required',
+        ]);
+
         $book->fill($request->all());
         $book->save();
 
@@ -55,6 +65,12 @@ class BooksController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request, [
+            'title'       => 'required|max:255',
+            'description' => 'required',
+            'author'      => 'required',
+        ]);
+
         $book = Book::create($request->all());
         $data = $this->item($book, new BookTransformer());
 
