@@ -48,7 +48,7 @@ class BooksController extends Controller
         $this->validate($request, [
             'title'       => 'required|max:255',
             'description' => 'required',
-            'author'      => 'required',
+            'author_id'   => 'exists:authors,id',
         ]);
 
         $book->fill($request->all());
@@ -68,7 +68,7 @@ class BooksController extends Controller
         $this->validate($request, [
             'title'       => 'required|max:255',
             'description' => 'required',
-            'author'      => 'required',
+            'author_id'   => 'required|exists:authors,id'
         ]);
 
         $book = Book::create($request->all());

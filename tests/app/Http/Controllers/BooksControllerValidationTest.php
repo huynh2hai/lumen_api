@@ -21,7 +21,7 @@ class BooksControllerValidationTest extends TestCase
     /** @test */
     public function it_validates_required_fields_when_updating_a_book()
     {
-        $book = factory(\App\Book::class)->create();
+        $book = $this->bookFactory();
         $this->put("/books/{$book->id}", [], ['Accept' => 'application/json']);
 
         $this->assertEquals(Response::HTTP_BAD_REQUEST, $this->response->getSTatusCode());
@@ -48,7 +48,7 @@ class BooksControllerValidationTest extends TestCase
     /** @test */
     public function title_fails_update_validation_when_just_too_long()
     {
-        $book = factory(\App\Book::class)->create();
+        $book = $this->bookFactory();
         $book->title = str_repeat('a', 256);
 
         $this->put("/books/$book->id", $book->toArray(), ['Accept' => 'application/json']);
