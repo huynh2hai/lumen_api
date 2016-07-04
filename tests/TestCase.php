@@ -71,4 +71,15 @@ class TestCase extends \Laravel\Lumen\Testing\TestCase
 
         return $books;
     }
+
+    /**
+     * Convenience method for creating author
+     *
+     * @param  integer $count
+     * @return \App\Author
+     */
+    protected function authorFactory($count = 1)
+    {
+        $authors = factory(\App\Author::class, $count)->create();
+    }
 }
