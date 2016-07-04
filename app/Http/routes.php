@@ -40,3 +40,18 @@ $app->group(
 
     }
 );
+
+$app->get('/bundles/{id:[\d]+}', [
+    'as' => 'bundles.show',
+    'uses' => 'BundlesController@show'
+]);
+
+$app->put('/bundles/{bundleId:[\d]+}/books/{bookId:[\d]+}', [
+    'as' => 'bundles.addBook',
+    'uses' => 'BundlesController@addBook'
+]);
+
+$app->delete('/bundles/{bundleId:[\d]+}/books/{bookId:[\d]+}', [
+    'as' => 'bundles.removeBook',
+    'uses' => 'BundlesController@removeBook'
+]);
