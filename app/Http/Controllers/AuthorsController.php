@@ -19,7 +19,8 @@ class AuthorsController extends Controller
      */
     public function index()
     {
-        return $this->collection(Author::all(), new AuthorTransformer());
+        $authors = Author::with('ratings')->get();
+        return $this->collection($authors, new AuthorTransformer());
     }
 
     /**

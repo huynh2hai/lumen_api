@@ -38,6 +38,8 @@ $app->group(
         $app->put('/{id:[\d]+}', 'AuthorsController@update');
         $app->delete('/{id:[\d]+}', 'AuthorsController@destroy');
 
+        $app->post('/{authorId:[\d]+}/ratings', 'AuthorsRatingsController@store');
+        $app->delete('/{authorId:[\d]+}/ratings/{ratingId:[\d]+}', 'AuthorsRatingsController@destroy');
     }
 );
 
